@@ -14,39 +14,45 @@ function changeCurrentItem(n) {
 function hideDesc(direction) {
   isEnabled = false;
   desc_list[currentItem].classList.add(direction);
-  desc_list[currentItem].addEventListener("animationend", function () {
-    this.classList.remove("active", direction);
-  });
+  desc_list[currentItem].addEventListener(
+    "animationend",
+    (hideD = function () {
+      this.classList.remove("active", direction);
+      this.removeEventListener("animationend", hideD);
+    })
+  );
 }
 function hideItem(direction) {
   isEnabled = false;
-
   items[currentItem].classList.add(direction);
   items[currentItem].addEventListener(
     "animationend",
     (hide_handle = function () {
       this.classList.remove("active", direction);
+      this.removeEventListener("animationend", hide_handle);
     })
   );
 }
 function showDesc(direction) {
   desc_list[currentItem].classList.add("next", direction);
-
-  desc_list[currentItem].addEventListener("animationend", function () {
-    this.classList.remove("next", direction);
-    this.classList.add("active");
-    isEnabled = true;
-  });
+  desc_list[currentItem].addEventListener(
+    "animationend",
+    (showD = function () {
+      this.classList.remove("next", direction);
+      this.classList.add("active");
+      this.removeEventListener("animationend", showD);
+      isEnabled = true;
+    })
+  );
 }
 function showItem(direction) {
   items[currentItem].classList.add("next", direction);
-
   items[currentItem].addEventListener(
     "animationend",
     (handle = function () {
       this.classList.remove("next", direction);
       this.classList.add("active");
-      items[currentItem].removeEventListener("animationend", handle);
+      this.removeEventListener("animationend", handle);
       isEnabled = true;
     })
   );
